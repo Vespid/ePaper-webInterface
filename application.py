@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, json, send_file, redirect
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
@@ -27,7 +27,8 @@ def index():
             if (request.form[delay_name]):
                 imageDelay[x] = float(request.form[delay_name]) * 1e6
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
+                #filename = secure_filename(file.filename)
+                filename = file.filename
                 filename = imageName + ".bmp"
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 imageID[x] += 1
