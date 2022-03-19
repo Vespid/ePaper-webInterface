@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>Image</h1>
+
+<form action = "/" method = "POST" enctype=multipart/form-data>
+                {% for n in range(0, img_count) %}
+                <div>
+                    <div class="current_image">Image {{n+1}}: <img src="/static/uploads/image_{{n+1}}.bmp"></div>
+                    <div class="update_data">
+                        Upload new image: <input type=file name=image_{{n+1}}>
+                        ID {{n+1}}: <input type="number" placeholder="{{data['id'][n]}}" name="id_{{n+1}}">
+                        Delay {{n+1}}: <input type="number" placeholder="{{data['delay'][n]/1000000}}" name="delay_{{n+1}}"> seconds
+                    </div>
+
+
+                <!-- <div>Image {{n+1}}: <img src="/static/uploads/image{{n+1}}.bmp" style="transform:rotate(90deg);"> <input type=file name=file_{{n}}></div> -->
+ 
+                </div>
+                {% endfor %}
+                <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+{% endblock %}
