@@ -46,6 +46,7 @@ def index():
 #css to rotate image
 #unique image urls - change arduino code to update based on unique file name
 # - need json file to display file name
+# - image_1-id.bmp
 
 
 # https://stackoverflow.com/questions/42091097/flask-save-data-from-forms-to-json-file
