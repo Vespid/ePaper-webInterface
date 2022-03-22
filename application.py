@@ -38,7 +38,9 @@ def index():
         export_dict["delay"] = imageDelay
         with open(json_url, 'w') as f:
             #json.dump(request.form, f)
-            json.dump(export_dict, f)
+            json_object = json.dumps(export_dict, indent = 4)
+            f.write(json_object)
+            #f.write(jsonify(str(export_dict)))
         return render_template('index.html', img_count=img_count, data=data)
     if request.method == 'GET':
         return render_template('index.html', img_count=img_count, data=data)
