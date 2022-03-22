@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, json, send_file, redirect
+from flask import Flask, render_template, request, url_for, json, send_file, redirect, jsonify
 #from werkzeug.utils import secure_filename
 import os
 
@@ -38,7 +38,7 @@ def index():
         export_dict["delay"] = imageDelay
         with open(json_url, 'w') as f:
             #json.dump(request.form, f)
-            json_object = json.dumps(export_dict, indent = 4)
+            json_object = json.dumps(export_dict)
             f.write(json_object)
             #f.write(jsonify(str(export_dict)))
         return render_template('index.html', img_count=img_count, data=data)
@@ -64,12 +64,12 @@ def download_file():
     return send_file("file.json")
 
 @app.route('/update.json')
-def test():
+def jsonFile():
     json_url = os.path.join(app.root_path, "static/data", "update.json")
-    with open(json_url, "r") as f:
-        content = f.read()
-    return render_template('content.html', content=content)
+    data = json.load(open(json_url))
+    return jsonify(data)
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
