@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, url_for, json, send_file, redirect, jsonify
-#from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename
+from PIL import Image
 import os
 
 app = Flask(__name__)
@@ -27,28 +28,40 @@ def index():
             if (request.form[delay_name]):
                 imageDelay[x] = float(request.form[delay_name]) * 1e6
             if file and allowed_file(file.filename):
-                #filename = secure_filename(file.filename)
+                filename = secure_filename(file.filename)
                 filename = file.filename
                 filename = imageName + ".bmp"
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                
+                img = Image.open(file)
+                if (img.size == (296, 128)):
+                    rotate_image = img.rotate(90, expand=True)
+                    rotate_name = "r_" + filename
+                    rotate_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    img.save(os.path.join(app.config['UPLOAD_FOLDER'], rotate_name))
+                else:
+                    rotate_image = img.rotate(270, expand=True)
+                    rotate_name = "r_" + filename
+                    rotate_image.save(os.path.join(app.config['UPLOAD_FOLDER'], rotate_name))
+                    img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
                 imageID[x] += 1
                 if imageID[x] > 255:
                     imageID[x] = 1
         export_dict["id"] = imageID
         export_dict["delay"] = imageDelay
         with open(json_url, 'w') as f:
-            #json.dump(request.form, f)
             json_object = json.dumps(export_dict)
             f.write(json_object)
-            #f.write(jsonify(str(export_dict)))
         return render_template('index.html', img_count=img_count, data=data)
     if request.method == 'GET':
         return render_template('index.html', img_count=img_count, data=data)
-#hide id? and autoupdate
+
 #css to rotate image
 #unique image urls - change arduino code to update based on unique file name
 # - need json file to display file name
 # - image_1-id.bmp
+#maybe save rotated and unrotated version
+#change seconds to minutes
 
 
 # https://stackoverflow.com/questions/42091097/flask-save-data-from-forms-to-json-file
@@ -59,9 +72,6 @@ def index():
 # https://stackoverflow.com/questions/40246702/displaying-a-txt-file-in-my-html-using-python-flask
 # https://www.reddit.com/r/flask/comments/31kk7n/af_displaying_contents_of_text_file_on_webpage/
 # https://stackoverflow.com/questions/20061774/rotate-an-image-in-image-source-in-html
-@app.route('/file2.json')
-def download_file():
-    return send_file("file.json")
 
 @app.route('/update.json')
 def jsonFile():

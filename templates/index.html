@@ -2,22 +2,32 @@
 <meta http-equiv="expires" content="0">
 
 {% block body %}
-    <h1>Image</h1>
+    <h1>ePaper Display</h1>
 
 <form action = "/" method = "POST" enctype=multipart/form-data>
-                {% for n in range(0, img_count) %}
-                <div>
-                    <div class="current_image">Image {{n+1}}: <img src="/static/uploads/image_{{n+1}}.bmp"></div>
-                    <div class="update_data">
-                        Upload new image: <input type=file name=image_{{n+1}}>
-                        ID {{n+1}}: <input type="number" placeholder="{{data['id'][n]}}" name="id_{{n+1}}">
-                        Delay {{n+1}}: <input type="number" placeholder="{{data['delay'][n]/1000000}}" name="delay_{{n+1}}"> seconds
-                    </div>
-
-
-                <!-- <div>Image {{n+1}}: <img src="/static/uploads/image{{n+1}}.bmp" style="transform:rotate(90deg);"> <input type=file name=file_{{n}}></div> -->
- 
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for n in range(0, img_count) %}
+          <div class="col">
+            <div class="card shadow-sm">
+              <h5 class="card-title">Image {{n+1}}</h5>
+              <div class="card">
+                <img src="/static/uploads/r_image_{{n+1}}.bmp">
+              </div>
+              <div class="card-body">
+                
+                Upload new image: <input type=file class="form-control-file" name=image_{{n+1}}>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="form-group">
+                    Delay {{n+1}}: <input type="number" placeholder="{{data['delay'][n]/1000000}}" name="delay_{{n+1}}"> seconds
+                  </div>
                 </div>
-                {% endfor %}
-                <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        <nav class="navbar fixed-bottom navbar-light bg-light">
+            <input class="btn btn-primary" type="submit" value="Submit">
+          </nav>
 {% endblock %}
